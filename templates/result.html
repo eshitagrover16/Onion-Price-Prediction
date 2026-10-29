@@ -1,0 +1,406 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Onion Price Prediction</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            padding: 40px 20px;
+            background: white;
+            color: black;
+            font-family: Arial, sans-serif;
+        }
+
+        .result-card {
+            max-width: 850px;
+            margin: auto;
+            background: #F3D5B5;
+            border: 2px solid black;
+            border-radius: 25px;
+            padding: 35px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-top: 0;
+            margin-bottom: 30px;
+            font-size: 32px;
+            color: black;
+        }
+
+        .price-box {
+            background: #F3D5B5;
+            border: 2px solid black;
+            border-radius: 18px;
+            padding: 25px;
+            text-align: center;
+            margin-bottom: 25px;
+        }
+
+        .price-label {
+            font-size: 18px;
+            margin-bottom: 10px;
+            color: black;
+        }
+
+        .price {
+            font-size: 48px;
+            font-weight: bold;
+            color: black;
+            margin-bottom: 5px;
+        }
+
+        .unit {
+            font-size: 18px;
+            color: black;
+        }
+
+        .details-box {
+            background: #F3D5B5;
+            border: 2px solid black;
+            border-radius: 18px;
+            padding: 22px;
+            margin-bottom: 20px;
+        }
+
+        .details-box h2 {
+            margin-top: 0;
+            margin-bottom: 18px;
+            color: black;
+            font-size: 22px;
+        }
+
+        .detail-row {
+            display: flex;
+            justify-content: space-between;
+            gap: 20px;
+            padding: 10px 0;
+            border-bottom: 1px solid black;
+            color: black;
+        }
+
+        .detail-row:last-child {
+            border-bottom: none;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: black;
+        }
+
+        .detail-value {
+            text-align: right;
+            color: black;
+        }
+
+        details {
+            background: #F3D5B5;
+            border: 2px solid black;
+            border-radius: 18px;
+            margin-bottom: 20px;
+            overflow: hidden;
+        }
+
+        summary {
+            cursor: pointer;
+            padding: 18px 20px;
+            font-size: 18px;
+            font-weight: bold;
+            color: black;
+            list-style: none;
+        }
+
+        summary::-webkit-details-marker {
+            display: none;
+        }
+
+        .details-content {
+            padding: 0 20px 20px 20px;
+            color: black;
+            line-height: 1.6;
+        }
+
+        .details-content p {
+            margin-bottom: 12px;
+        }
+
+        .details-content strong {
+            color: black;
+        }
+
+        .button-container {
+            text-align: center;
+            margin-top: 25px;
+        }
+
+        .button {
+            display: inline-block;
+            padding: 13px 24px;
+            margin: 5px;
+            border: 2px solid black;
+            border-radius: 10px;
+            background: white;
+            color: black;
+            text-decoration: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .button:hover {
+            background: black;
+            color: white;
+        }
+
+        @media (max-width: 600px) {
+
+            body {
+                padding: 20px 10px;
+            }
+
+            .result-card {
+                padding: 20px;
+                border-radius: 20px;
+            }
+
+            h1 {
+                font-size: 27px;
+            }
+
+            .price {
+                font-size: 38px;
+            }
+
+            .detail-row {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .detail-value {
+                text-align: left;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="result-card">
+
+        <h1>
+            Onion Price Prediction
+        </h1>
+
+
+        <!-- ========================================= -->
+        <!-- PREDICTED PRICE -->
+        <!-- ========================================= -->
+
+        <div class="price-box">
+
+            <div class="price-label">
+                Predicted Onion Price
+            </div>
+
+            <div class="price">
+                ₹{{ prediction }}
+            </div>
+
+            <div class="unit">
+                per kg
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- PREDICTION DETAILS -->
+        <!-- ========================================= -->
+
+        <div class="details-box">
+
+            <h2>
+                Prediction Details
+            </h2>
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Market
+                </div>
+
+                <div class="detail-value">
+                    {{ market }}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Date
+                </div>
+
+                <div class="detail-value">
+                    {{ date }}
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Temperature
+                </div>
+
+                <div class="detail-value">
+                    {{ temperature }} °C
+                </div>
+
+            </div>
+
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Rainfall
+                </div>
+
+                <div class="detail-value">
+                    {{ rainfall }} mm
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- FESTIVAL INFORMATION -->
+        <!-- ========================================= -->
+
+        <div class="details-box">
+
+            <h2>
+                Festival Information
+            </h2>
+
+            <div class="detail-row">
+
+                <div class="detail-label">
+                    Festival Distance
+                </div>
+
+                <div class="detail-value">
+
+                    {% if days_to_festival > 0 %}
+
+                        {{ days_to_festival }} days until nearest festival
+
+                    {% elif days_to_festival < 0 %}
+
+                        {{ days_to_festival|abs }} days since nearest festival
+
+                    {% else %}
+
+                        Festival is today
+
+                    {% endif %}
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ========================================= -->
+        <!-- ABOUT THE PREDICTION MODEL -->
+        <!-- ========================================= -->
+
+        <details>
+
+            <summary>
+                About the Prediction Model
+            </summary>
+
+            <div class="details-content">
+
+                <p>
+                    This project predicts onion prices in
+                    Himachal Pradesh agricultural markets
+                    using historical mandi prices together
+                    with weather, seasonal, and festival
+                    information.
+                </p>
+
+                <p>
+                    <strong>Model used:</strong>
+                    Polynomial Regression with Ridge
+                    regularization.
+                </p>
+
+                <p>
+                    <strong>Important prediction features:</strong>
+                    days to festival, day of year, rainfall,
+                    average temperature, market, season,
+                    and year.
+                </p>
+
+                <p>
+                    The model was trained using historical
+                    onion price data from 2023 to 2025.
+                </p>
+
+                <p>
+                    The original model predicts price in
+                    rupees per quintal. Since one quintal
+                    equals 100 kilograms, the displayed price
+                    has been converted to
+                    <strong>rupees per kilogram (₹/kg)</strong>.
+                </p>
+
+            </div>
+
+        </details>
+
+
+        <!-- ========================================= -->
+        <!-- BUTTONS -->
+        <!-- ========================================= -->
+
+        <div class="button-container">
+
+            <a href="/" class="button">
+                Make Another Prediction
+            </a>
+
+            <a href="/history" class="button">
+                View Previous Predictions
+            </a>
+
+        </div>
+
+    </div>
+
+</body>
+
+</html>

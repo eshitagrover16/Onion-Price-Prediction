@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <title>Prediction History</title>
+
+
+    <style>
+
+        /* =========================================
+           RESET
+        ========================================= */
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+
+        /* =========================================
+           PAGE
+        ========================================= */
+
+        html,
+        body {
+            min-height: 100%;
+            overflow-x: hidden;
+            overflow-y: auto;
+        }
+
+
+        body {
+            font-family: Arial, sans-serif;
+
+            background: #FFDBBB;
+
+            color: #000000;
+
+            line-height: 1.5;
+
+            min-height: 100vh;
+        }
+
+
+        /* =========================================
+           MAIN CONTAINER
+        ========================================= */
+
+        .container {
+            width: 100%;
+
+            max-width: 900px;
+
+            margin: 40px auto;
+
+            padding: 0 20px 40px;
+        }
+
+
+        /* =========================================
+           NO OUTER BOX
+        ========================================= */
+
+        .card {
+            background: transparent;
+
+            border: none;
+
+            border-radius: 0;
+
+            padding: 0;
+
+            box-shadow: none;
+        }
+
+
+        /* =========================================
+           PAGE HEADING
+        ========================================= */
+
+        .card h2 {
+            text-align: center;
+
+            color: #000000;
+
+            margin: 0 0 25px;
+
+            font-size: 24px;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================================
+           TABLE CONTAINER
+        ========================================= */
+
+        .table-container {
+            width: 100%;
+
+            overflow-x: auto;
+
+            margin-top: 0;
+        }
+
+
+        /* =========================================
+           TABLE
+        ========================================= */
+
+        table {
+            width: 100%;
+
+            border-collapse: collapse;
+
+            border: 2px solid #000000;
+
+            background: #FFDBBB;
+        }
+
+
+        /* =========================================
+           TABLE HEADER
+        ========================================= */
+
+        th {
+            background: #FFDBBB;
+
+            color: #000000;
+
+            padding: 14px;
+
+            text-align: center;
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            border-bottom: 2px solid #000000;
+        }
+
+
+        /* =========================================
+           TABLE CELLS
+        ========================================= */
+
+        td {
+            padding: 14px;
+
+            text-align: center;
+
+            color: #000000;
+
+            font-size: 13px;
+
+            border-bottom: 1px solid #000000;
+        }
+
+
+        /* =========================================
+           LAST ROW
+        ========================================= */
+
+        tr:last-child td {
+            border-bottom: none;
+        }
+
+
+        /* =========================================
+           ROW HOVER
+        ========================================= */
+
+        tr:hover {
+            background: #FFDBBB;
+        }
+
+
+        /* =========================================
+           PRICE
+        ========================================= */
+
+        .price {
+            font-weight: bold;
+
+            color: #000000;
+        }
+
+
+        /* =========================================
+           EMPTY MESSAGE
+        ========================================= */
+
+        .empty {
+            text-align: center;
+
+            padding: 30px 15px;
+
+            color: #000000;
+
+            font-size: 14px;
+        }
+
+
+        .empty p {
+            margin: 6px 0;
+
+            font-style: italic;
+        }
+
+
+        /* =========================================
+           BUTTON
+        ========================================= */
+
+        .button-container {
+            text-align: center;
+
+            margin-top: 30px;
+        }
+
+
+        .button {
+            display: inline-flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            min-height: 47px;
+
+            padding: 12px 25px;
+
+            background: #FFDBBB;
+
+            color: #000000;
+
+            border: 2px solid #000000;
+
+            box-shadow: 0 3px 0 #000000;
+
+            text-decoration: none;
+
+            border-radius: 24px;
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            transition: 0.2s ease;
+        }
+
+
+        /* =========================================
+           BUTTON HOVER
+        ========================================= */
+
+        .button:hover {
+            background: #FFFFFF;
+
+            transform: translateY(-2px);
+        }
+
+
+        /* =========================================
+           MOBILE
+        ========================================= */
+
+        @media (max-width: 600px) {
+
+            .container {
+                margin: 25px auto;
+
+                padding: 0 12px 35px;
+            }
+
+
+            .card h2 {
+                font-size: 20px;
+
+                margin-bottom: 20px;
+            }
+
+
+            th {
+                padding: 11px 9px;
+
+                font-size: 11px;
+            }
+
+
+            td {
+                padding: 11px 9px;
+
+                font-size: 11px;
+            }
+
+
+            .button {
+                min-height: 45px;
+
+                padding: 11px 22px;
+
+                font-size: 12px;
+            }
+
+        }
+
+
+        /* =========================================
+           SMALL MOBILE
+        ========================================= */
+
+        @media (max-width: 400px) {
+
+            .card h2 {
+                font-size: 19px;
+            }
+
+
+            th,
+            td {
+                padding: 9px 7px;
+
+                font-size: 10px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <!-- =========================================
+         MAIN
+    ========================================= -->
+
+    <div class="container">
+
+
+        <div class="card">
+
+
+            <h2>
+                Previous Predictions
+            </h2>
+
+
+            {% if history %}
+
+
+            <!-- =====================================
+                 TABLE
+            ====================================== -->
+
+            <div class="table-container">
+
+                <table>
+
+
+                    <thead>
+
+                        <tr>
+
+                            <th>
+                                #
+                            </th>
+
+                            <th>
+                                Market
+                            </th>
+
+                            <th>
+                                Date
+                            </th>
+
+                            <th>
+                                Predicted Price
+                            </th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% for row in history %}
+
+                        <tr>
+
+                            <td>
+                                {{ loop.index }}
+                            </td>
+
+                            <td>
+                                {{ row.market }}
+                            </td>
+
+                            <td>
+                                {{ row.date }}
+                            </td>
+
+                            <td class="price">
+                                ₹{{ row.predicted_price }}
+                            </td>
+
+                        </tr>
+
+                        {% endfor %}
+
+
+                    </tbody>
+
+
+                </table>
+
+            </div>
+
+
+            {% else %}
+
+
+            <!-- =====================================
+                 EMPTY HISTORY
+            ====================================== -->
+
+            <div class="empty">
+
+                <p>
+                    No predictions have been made yet.
+                </p>
+
+                <p>
+                    Make your first prediction to see it here.
+                </p>
+
+            </div>
+
+
+            {% endif %}
+
+
+
+            <!-- =====================================
+                 NEW PREDICTION BUTTON
+            ====================================== -->
+
+            <div class="button-container">
+
+                <a
+                    href="/"
+                    class="button"
+                >
+                    ← New Prediction
+                </a>
+
+            </div>
+
+
+        </div>
+
+
+    </div>
+
+
+</body>
+
+</html>
